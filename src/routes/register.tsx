@@ -88,7 +88,6 @@ function RegisterPage() {
               <SelectContent>
                 <SelectItem value="operations">Operations Team</SelectItem>
                 <SelectItem value="quality">Quality Team</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>
             </Select>
           </div>
