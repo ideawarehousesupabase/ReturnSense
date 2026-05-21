@@ -21,7 +21,7 @@ function QualityDash() {
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
         <Card className="p-5 lg:col-span-2">
-          <div className="mb-3 text-sm font-medium">Issue severity</div>
+          <div className="mb-3 text-sm font-medium">Issue severity (mock)</div>
           <div className="h-72">
             <ResponsiveContainer>
               <BarChart data={issueDistribution}>

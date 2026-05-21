@@ -39,6 +39,8 @@ import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard.admi
 import { Route as DashboardAdminSystemRouteImport } from './routes/dashboard.admin.system'
 import { Route as DashboardAdminSettingsRouteImport } from './routes/dashboard.admin.settings'
 import { Route as DashboardAdminBillingRouteImport } from './routes/dashboard.admin.billing'
+import { Route as DashboardQualitySkuInvestigationIndexRouteImport } from './routes/dashboard.quality.sku-investigation.index'
+import { Route as DashboardQualitySkuInvestigationSkuIdRouteImport } from './routes/dashboard.quality.sku-investigation.$skuId'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -201,6 +203,18 @@ const DashboardAdminBillingRoute = DashboardAdminBillingRouteImport.update({
   path: '/billing',
   getParentRoute: () => DashboardAdminRoute,
 } as any)
+const DashboardQualitySkuInvestigationIndexRoute =
+  DashboardQualitySkuInvestigationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => DashboardQualitySkuInvestigationRoute,
+  } as any)
+const DashboardQualitySkuInvestigationSkuIdRoute =
+  DashboardQualitySkuInvestigationSkuIdRouteImport.update({
+    id: '/$skuId',
+    path: '/$skuId',
+    getParentRoute: () => DashboardQualitySkuInvestigationRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -229,10 +243,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/quality/failure-analysis': typeof DashboardQualityFailureAnalysisRoute
   '/dashboard/quality/feedback': typeof DashboardQualityFeedbackRoute
   '/dashboard/quality/settings': typeof DashboardQualitySettingsRoute
-  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationRoute
+  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationRouteWithChildren
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/operations/': typeof DashboardOperationsIndexRoute
   '/dashboard/quality/': typeof DashboardQualityIndexRoute
+  '/dashboard/quality/sku-investigation/$skuId': typeof DashboardQualitySkuInvestigationSkuIdRoute
+  '/dashboard/quality/sku-investigation/': typeof DashboardQualitySkuInvestigationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -258,10 +274,11 @@ export interface FileRoutesByTo {
   '/dashboard/quality/failure-analysis': typeof DashboardQualityFailureAnalysisRoute
   '/dashboard/quality/feedback': typeof DashboardQualityFeedbackRoute
   '/dashboard/quality/settings': typeof DashboardQualitySettingsRoute
-  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/operations': typeof DashboardOperationsIndexRoute
   '/dashboard/quality': typeof DashboardQualityIndexRoute
+  '/dashboard/quality/sku-investigation/$skuId': typeof DashboardQualitySkuInvestigationSkuIdRoute
+  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -291,10 +308,12 @@ export interface FileRoutesById {
   '/dashboard/quality/failure-analysis': typeof DashboardQualityFailureAnalysisRoute
   '/dashboard/quality/feedback': typeof DashboardQualityFeedbackRoute
   '/dashboard/quality/settings': typeof DashboardQualitySettingsRoute
-  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationRoute
+  '/dashboard/quality/sku-investigation': typeof DashboardQualitySkuInvestigationRouteWithChildren
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/operations/': typeof DashboardOperationsIndexRoute
   '/dashboard/quality/': typeof DashboardQualityIndexRoute
+  '/dashboard/quality/sku-investigation/$skuId': typeof DashboardQualitySkuInvestigationSkuIdRoute
+  '/dashboard/quality/sku-investigation/': typeof DashboardQualitySkuInvestigationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -329,6 +348,8 @@ export interface FileRouteTypes {
     | '/dashboard/admin/'
     | '/dashboard/operations/'
     | '/dashboard/quality/'
+    | '/dashboard/quality/sku-investigation/$skuId'
+    | '/dashboard/quality/sku-investigation/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -354,10 +375,11 @@ export interface FileRouteTypes {
     | '/dashboard/quality/failure-analysis'
     | '/dashboard/quality/feedback'
     | '/dashboard/quality/settings'
-    | '/dashboard/quality/sku-investigation'
     | '/dashboard/admin'
     | '/dashboard/operations'
     | '/dashboard/quality'
+    | '/dashboard/quality/sku-investigation/$skuId'
+    | '/dashboard/quality/sku-investigation'
   id:
     | '__root__'
     | '/'
@@ -390,6 +412,8 @@ export interface FileRouteTypes {
     | '/dashboard/admin/'
     | '/dashboard/operations/'
     | '/dashboard/quality/'
+    | '/dashboard/quality/sku-investigation/$skuId'
+    | '/dashboard/quality/sku-investigation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -618,6 +642,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminBillingRouteImport
       parentRoute: typeof DashboardAdminRoute
     }
+    '/dashboard/quality/sku-investigation/': {
+      id: '/dashboard/quality/sku-investigation/'
+      path: '/'
+      fullPath: '/dashboard/quality/sku-investigation/'
+      preLoaderRoute: typeof DashboardQualitySkuInvestigationIndexRouteImport
+      parentRoute: typeof DashboardQualitySkuInvestigationRoute
+    }
+    '/dashboard/quality/sku-investigation/$skuId': {
+      id: '/dashboard/quality/sku-investigation/$skuId'
+      path: '/$skuId'
+      fullPath: '/dashboard/quality/sku-investigation/$skuId'
+      preLoaderRoute: typeof DashboardQualitySkuInvestigationSkuIdRouteImport
+      parentRoute: typeof DashboardQualitySkuInvestigationRoute
+    }
   }
 }
 
@@ -666,12 +704,30 @@ const DashboardOperationsRouteChildren: DashboardOperationsRouteChildren = {
 const DashboardOperationsRouteWithChildren =
   DashboardOperationsRoute._addFileChildren(DashboardOperationsRouteChildren)
 
+interface DashboardQualitySkuInvestigationRouteChildren {
+  DashboardQualitySkuInvestigationSkuIdRoute: typeof DashboardQualitySkuInvestigationSkuIdRoute
+  DashboardQualitySkuInvestigationIndexRoute: typeof DashboardQualitySkuInvestigationIndexRoute
+}
+
+const DashboardQualitySkuInvestigationRouteChildren: DashboardQualitySkuInvestigationRouteChildren =
+  {
+    DashboardQualitySkuInvestigationSkuIdRoute:
+      DashboardQualitySkuInvestigationSkuIdRoute,
+    DashboardQualitySkuInvestigationIndexRoute:
+      DashboardQualitySkuInvestigationIndexRoute,
+  }
+
+const DashboardQualitySkuInvestigationRouteWithChildren =
+  DashboardQualitySkuInvestigationRoute._addFileChildren(
+    DashboardQualitySkuInvestigationRouteChildren,
+  )
+
 interface DashboardQualityRouteChildren {
   DashboardQualityAlertsRoute: typeof DashboardQualityAlertsRoute
   DashboardQualityFailureAnalysisRoute: typeof DashboardQualityFailureAnalysisRoute
   DashboardQualityFeedbackRoute: typeof DashboardQualityFeedbackRoute
   DashboardQualitySettingsRoute: typeof DashboardQualitySettingsRoute
-  DashboardQualitySkuInvestigationRoute: typeof DashboardQualitySkuInvestigationRoute
+  DashboardQualitySkuInvestigationRoute: typeof DashboardQualitySkuInvestigationRouteWithChildren
   DashboardQualityIndexRoute: typeof DashboardQualityIndexRoute
 }
 
@@ -680,7 +736,8 @@ const DashboardQualityRouteChildren: DashboardQualityRouteChildren = {
   DashboardQualityFailureAnalysisRoute: DashboardQualityFailureAnalysisRoute,
   DashboardQualityFeedbackRoute: DashboardQualityFeedbackRoute,
   DashboardQualitySettingsRoute: DashboardQualitySettingsRoute,
-  DashboardQualitySkuInvestigationRoute: DashboardQualitySkuInvestigationRoute,
+  DashboardQualitySkuInvestigationRoute:
+    DashboardQualitySkuInvestigationRouteWithChildren,
   DashboardQualityIndexRoute: DashboardQualityIndexRoute,
 }
 

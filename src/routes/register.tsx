@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Activity, Eye, EyeOff } from "lucide-react";
+import { Activity } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/register")({
@@ -24,8 +24,6 @@ function RegisterPage() {
   const [role, setRole] = useState<Role>("operations");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPw, setShowPw] = useState(false);
-  const [showCf, setShowCf] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,16 +33,11 @@ function RegisterPage() {
     if (password.length < 6) return setErr("Password must be at least 6 characters");
     if (password !== confirm) return setErr("Passwords do not match");
     setLoading(true);
-    try {
-      const res = await register({ fullName, email, password, role });
-      if (!res.ok) return setErr(res.error);
-      toast.success("Account created. Please sign in.");
-      nav({ to: "/login" });
-    } catch {
-      setErr("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    const res = await register({ fullName, email, password, role });
+    setLoading(false);
+    if (!res.ok) return setErr(res.error);
+    toast.success("Account created. Please sign in.");
+    nav({ to: "/login" });
   }
 
   return (
@@ -62,24 +55,8 @@ function RegisterPage() {
           <div><Label htmlFor="n">Full name</Label><Input id="n" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1" /></div>
           <div><Label htmlFor="e">Email</Label><Input id="e" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1" /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="p">Password</Label>
-              <div className="relative mt-1">
-                <Input id="p" type={showPw ? "text" : "password"} required value={password} onChange={(e) => setPassword(e.target.value)} className="pr-10" />
-                <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors" tabIndex={-1}>
-                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="c">Confirm</Label>
-              <div className="relative mt-1">
-                <Input id="c" type={showCf ? "text" : "password"} required value={confirm} onChange={(e) => setConfirm(e.target.value)} className="pr-10" />
-                <button type="button" onClick={() => setShowCf(!showCf)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors" tabIndex={-1}>
-                  {showCf ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
+            <div><Label htmlFor="p">Password</Label><Input id="p" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1" /></div>
+            <div><Label htmlFor="c">Confirm</Label><Input id="c" type="password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-1" /></div>
           </div>
           <div>
             <Label>Role</Label>

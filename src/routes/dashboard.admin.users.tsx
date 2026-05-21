@@ -8,13 +8,8 @@ import { useState, useEffect } from "react";
 export const Route = createFileRoute("/dashboard/admin/users")({ component: Page });
 function Page() {
   const [users, setUsers] = useState<StoredUser[]>([]);
-  const [loading, setLoading] = useState(true);
   const [q, setQ] = useState(""); const [role, setRole] = useState<"all" | Role>("all");
-  useEffect(() => {
-    getAllUsers()
-      .then((data) => setUsers(data))
-      .finally(() => setLoading(false));
-  }, []);
+  useEffect(() => { getAllUsers().then(setUsers).catch(() => setUsers([])); }, []);
   const rows = users.filter((u) =>
     (q ? (u.fullName.toLowerCase().includes(q.toLowerCase()) || u.email.toLowerCase().includes(q.toLowerCase())) : true) &&
     (role === "all" ? true : u.role === role));
@@ -36,9 +31,7 @@ function Page() {
           <thead><tr className="border-b text-left text-xs uppercase tracking-wider text-muted-foreground">
             <th className="py-2">ID</th><th>Name</th><th>Email</th><th>Role</th><th>Created</th>
           </tr></thead>
-          <tbody>{loading ? (
-            <tr><td colSpan={5} className="py-10 text-center text-muted-foreground">Loading users…</td></tr>
-          ) : rows.length === 0 ? (<tr><td colSpan={5} className="py-10 text-center text-muted-foreground">No users found.</td></tr>) : rows.map((u) => (
+          <tbody>{rows.length === 0 ? (<tr><td colSpan={5} className="py-10 text-center text-muted-foreground">No users found.</td></tr>) : rows.map((u) => (
             <tr key={u.id} className="border-b last:border-0">
               <td className="py-2">{u.id}</td><td>{u.fullName}</td><td className="text-muted-foreground">{u.email}</td>
               <td><span className="rounded-full bg-secondary px-2 py-0.5 text-[11px] capitalize">{u.role}</span></td>

@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth, type Role } from "@/lib/auth";
-import { Activity, LayoutDashboard, ListChecks, PackageSearch, BarChart3, Bell, Plug, FileText, Settings, Users, Server, CreditCard, ShieldAlert, Microscope, MessageSquare, LogOut } from "lucide-react";
+import { Activity, LayoutDashboard, ListChecks, PackageSearch, BarChart3, Bell, Plug, FileText, Settings, Users, Server, CreditCard, ShieldAlert, Microscope, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
@@ -41,7 +41,7 @@ const roleLabels: Record<Role, string> = {
 };
 
 export function DashboardLayout({ role }: { role: Role }) {
-  const { user, ready, logout } = useAuth();
+  const { user, ready } = useAuth();
   const nav = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
@@ -94,12 +94,6 @@ export function DashboardLayout({ role }: { role: Role }) {
           <div className="rounded-md bg-sidebar-accent/40 p-3">
             <div className="text-xs font-medium">{user.fullName}</div>
             <div className="truncate text-[11px] text-sidebar-foreground/60">{user.email}</div>
-            <button
-              onClick={() => { logout(); nav({ to: "/login" }); }}
-              className="mt-2 inline-flex items-center gap-1 text-[11px] text-sidebar-foreground/70 hover:text-sidebar-foreground"
-            >
-              <LogOut className="h-3 w-3" /> Sign out
-            </button>
           </div>
         </div>
       </aside>
@@ -110,7 +104,7 @@ export function DashboardLayout({ role }: { role: Role }) {
             <div className="text-sm font-medium">Welcome back, {user.fullName.split(" ")[0]}</div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { logout(); nav({ to: "/login" }); }}>Logout</Button>
+            <Button variant="outline" size="sm" asChild><Link to="/">View site</Link></Button>
           </div>
         </div>
         <div className="p-6 lg:p-8">

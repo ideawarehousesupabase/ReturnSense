@@ -20,7 +20,7 @@ function ReportsPage() {
           <tr key={r.name} className="border-b last:border-0">
             <td className="px-4 py-3"><div className="flex items-center gap-2"><FileText className="h-4 w-4 text-muted-foreground" />{r.name}</div></td>
             <td>{r.period}</td><td><span className="rounded-full bg-secondary px-2 py-0.5 text-[11px]">{r.type}</span></td><td>{r.size}</td>
-            <td className="px-4 text-right"><Button variant="outline" size="sm" onClick={() => toast.success(`${r.name} download started`)}><Download className="mr-1 h-3.5 w-3.5" /> Download</Button></td>
+            <td className="px-4 text-right"><Button variant="outline" size="sm" onClick={() => toast.success(`${r.name} download started (mock)`)}><Download className="mr-1 h-3.5 w-3.5" /> Download</Button></td>
           </tr>))}</tbody>
       </table></Card>
     </div>

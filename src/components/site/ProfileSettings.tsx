@@ -16,7 +16,7 @@ export function ProfileSettings() {
         <Card className="p-6">
           <div className="text-sm font-medium">Profile</div>
           <form
-            onSubmit={(e) => { e.preventDefault(); toast.success("Profile saved"); }}
+            onSubmit={(e) => { e.preventDefault(); toast.success("Profile saved (mock)"); }}
             className="mt-4 space-y-4"
           >
             <div><Label htmlFor="n">Full name</Label><Input id="n" defaultValue={user.fullName} className="mt-1" /></div>
