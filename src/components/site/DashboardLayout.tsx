@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth, type Role } from "@/lib/auth";
-import { Activity, LayoutDashboard, ListChecks, PackageSearch, BarChart3, Bell, Plug, FileText, Settings, Users, Server, CreditCard, ShieldAlert, Microscope, MessageSquare } from "lucide-react";
+import { Activity, LayoutDashboard, ListChecks, PackageSearch, BarChart3, Bell, Plug, FileText, Settings, Users, Server, CreditCard, ShieldAlert, Microscope, MessageSquare, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
@@ -41,7 +41,7 @@ const roleLabels: Record<Role, string> = {
 };
 
 export function DashboardLayout({ role }: { role: Role }) {
-  const { user, ready } = useAuth();
+  const { user, ready, logout } = useAuth();
   const nav = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
@@ -104,7 +104,10 @@ export function DashboardLayout({ role }: { role: Role }) {
             <div className="text-sm font-medium">Welcome back, {user.fullName.split(" ")[0]}</div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild><Link to="/">View site</Link></Button>
+            <Button variant="outline" size="sm" onClick={() => logout()}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign out
+            </Button>
           </div>
         </div>
         <div className="p-6 lg:p-8">
